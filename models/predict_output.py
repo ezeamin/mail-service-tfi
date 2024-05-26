@@ -1,12 +1,7 @@
 from nltk.corpus import stopwords
 import re
-import nltk
-import sys
 
 from models.model import Model
-
-if len(sys.argv) > 1 and sys.argv[1] == 'prod':
-    nltk.download('stopwords')
 
 stop_words = stopwords.words('english')
 model = Model()
