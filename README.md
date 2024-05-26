@@ -1,15 +1,22 @@
-# Project Name
+# Phishing Detector Service
 
-A brief description of your project.
+This is a web service that detects phishing emails upon resend to a specific inbox. 
+
+The service uses an AI Model based on Complement Naive Bayes Algorithm to classify emails as phishing or not phishing.
+
+This is a project developed for the subject "Proyecto Final Integrador" at Universidad del Norte Santo Tomás de Aquino.
 
 ## Dependencies
 
-List any dependencies that need to be installed before running the project. Include instructions on how to install them.
+Dependencies are listed in the `requirements.txt` file. You can install them by running the following command:
+```shell
+pip install -r requirements.txt
+```
 
-For example, if your project requires NLTK, you can include the following instructions:
+After that, you'll need to install the NLTK data. Follow the instructions below to install NLTK and download the necessary data.
 
-1. Install NLTK by running the following command:
-    ```
+1. Install NLTK by running the following command (if not already installed):
+    ```shell
     pip install nltk
     ```
 
@@ -21,30 +28,27 @@ For example, if your project requires NLTK, you can include the following instru
 
 ## Running the Web Service
 
-Provide instructions on how to run the web service. Include any necessary steps or commands.
+This is a web service developed in Python with Flask. You can run the web service by following the instructions below.
 
-For example, if your project uses Flask to run the web service, you can include the following instructions:
+1. First, be sure to create a `config.py` file with the content of the `config.sample.py` file. This info will be used to connect to the email server. Be careful with the credentials you use.
 
-1. Install Flask by running the following command:
+2. Then, run the web service by executing the following command:
     ```
-    pip install flask
+    python main.py
     ```
-
-2. Run the web service by executing the following command:
-    ```
-    python app.py
-    ```
-
-    Replace `app.py` with the name of your main Python file.
 
 ## Usage
 
-Explain how to use the web service. Provide examples or code snippets if necessary.
+Every one minute, the web service will check the inbox for new emails. If a new email is found, the service will check if the email is a phishing email using an AI Model based on Complement Naive Bayes Algorithm. If it is, the email will be marked as a phishing email and the user will be notified with a response email.
 
-## Contributing
-
-If you would like to contribute to this project, please follow the guidelines in [CONTRIBUTING.md](link-to-contributing-file).
+New emails will also be saved in a .csv file (`mails.csv`) for further analysis.
 
 ## License
 
-This project is licensed under the [MIT License](link-to-license-file).
+This project is licensed under the MIT License.
+
+## Authors
+
+- [Ezequiel Amin](https://github.com/ezeamin)
+- [Valentina Ormaechea](https://github.com/valeormaechea)
+- [Bernardita Peñalba](https://github.com/bernipenalba)

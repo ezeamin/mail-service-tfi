@@ -8,14 +8,20 @@ stop_words = stopwords.words('english')
 model = Model()
 
 def prepareTestRawData(emailBody):
+    # Remove the forwarded section
+    emailBody = re.sub(r'(Resent|Forwarded) message.*\n', '', emailBody)
+    emailBody = re.sub(r'(From|De):.*\n', '', emailBody)
+    emailBody = re.sub(r'(Sent|Enviado|Date):.*\n', '', emailBody)
+    emailBody = re.sub(r'(To|Para):.*\n', '', emailBody)
+    emailBody = re.sub(r'(Subject|Asunto):.*\n', '', emailBody)
+
+    # Remove special characters, convert to lowercase, and remove stop words
     emailBody = re.sub(r'[^\w\s]', '', emailBody).replace('_', '').lower()
     emailBody = ' '.join([word for word in emailBody.split() if word not in stop_words and not word.isdigit()])
+
     return emailBody
 
 def predictOutput(emailBody):
-    # convert_feature = load('models/data/tfidf_vectorizer.joblib')
-    # model = load('models/data/ComplementNB.joblib')
-
     print(f'\nTest data: {emailBody}')
 
     new_processed_data = [prepareTestRawData(emailBody)]
