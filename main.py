@@ -9,6 +9,8 @@ from models.predict_output import predictOutput
 from cleanup_email import extract
 from mail import getServerConnection,getImapConnection, SMTP_USER
 from utils import set_email_content,save_email_in_file,bcolors
+import sys
+import nltk
 
 app = Flask(__name__)
 
@@ -102,4 +104,8 @@ def index():
     return 'Email checker service is running.'
 
 if __name__ == '__main__':
+    # If environment is production (run with gunicorn), install nltk and download stopwords
+    if len(sys.argv) > 1 and sys.argv[1] == 'prod':
+        nltk.download('stopwords')
+
     app.run()
