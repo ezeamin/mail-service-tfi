@@ -1,25 +1,40 @@
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
 import email
+import datetime
 
 from email.message import EmailMessage
 
 from models.predict_output import predictOutput
 from cleanup_email import extract
-from mail import server,client,SMTP_USER
-from utils import set_email_content,save_email_in_file
+from mail import getServerConnection,getImapConnection, SMTP_USER
+from utils import set_email_content,save_email_in_file,bcolors
 
 app = Flask(__name__)
 
+client = getImapConnection()
+
 # Initialize IMAP client
 def check_email():
-    print('\nChecking for new emails...')
+    # Print day and time
+    print(f'\n🕒 {datetime.datetime.now().strftime("%d/%m/%Y - %H:%M:%S")}')
+
+    # Search for new emails in INBOX
+    client.select_folder('INBOX')
+    process_emails("INBOX 📩")
     
+    # Search for new emails in SPAM
+    client.select_folder('Junk')
+    process_emails("SPAM 🗑️")
+    
+# Check for new emails in the selected folder
+def process_emails(type):
+    print(f'🔍 Checking for new emails in {type}...')
     messages = client.search(['UNSEEN'])
     if not messages:
-        print('No new unseen emails.')
+        print(f'🫡  No new unseen emails in {type}.\n')
     else:
-        print(f'Found {len(messages)} new unseen email(s).')
+        print(f'🧐  Found {len(messages)} new unseen email(s) in {type}.')
 
         for uid, message_data in client.fetch(messages, 'RFC822').items():
             email_message = extract(message_data[b'RFC822'], uid)
@@ -47,8 +62,9 @@ def handle_email(email_message):
 
 # Send a reply to the email
 def send_reply(email_message, result):
-    print("\nTrying to send a reply...")
+    server = getServerConnection()
 
+    print("\n📦 Trying to send a reply...")
     subject = email_message['subject'].replace('\n', '').replace('\r', '')
     message_id = email_message['Message-ID'].replace('\n', '').replace('\r', '')
     from_mail = email_message['from']
@@ -69,12 +85,17 @@ def send_reply(email_message, result):
     reply.add_alternative(html_content, subtype='html')
 
     server.send_message(reply)
-    print(f'Reply sent to {email_message["from"]}.')
+    print(f'✅ Reply sent to {email_message["from"]} with result: {f"{bcolors.WARNING}Phishing{bcolors.ENDC}" if result == -1 else f"{bcolors.OKGREEN}Safe{bcolors.ENDC}"}.\n')
+    
+    server.quit()
 
 # Schedule the email check
 scheduler = BackgroundScheduler()
-scheduler.add_job(check_email, 'interval', seconds=30)
+scheduler.add_job(check_email, 'interval', minutes=1)
 scheduler.start()
+
+# Check the email on startup
+check_email()
 
 @app.route('/')
 def index():
