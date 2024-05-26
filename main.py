@@ -104,8 +104,4 @@ def index():
     return 'Email checker service is running.'
 
 if __name__ == '__main__':
-    # If environment is production (run with gunicorn), install nltk and download stopwords
-    if len(sys.argv) > 1 and sys.argv[1] == 'prod':
-        nltk.download('stopwords')
-
     app.run()
