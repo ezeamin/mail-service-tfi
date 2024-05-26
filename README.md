@@ -23,7 +23,7 @@ After that, you'll need to install the NLTK data. Follow the instructions below 
 2. Initialize NLTK by running the following Python code:
     ```python
     import nltk
-    nltk.download('all')
+    nltk.download('stopwords')
     ```
 
 ## Running the Web Service
