@@ -29,4 +29,4 @@ def create_email(email_message,body,result):
         email = Emails(from_field=from_field, subject=subject, body=body, predicted=result_message, actual=actual)
         db.session.add(email)
         db.session.commit()
-        print(f"🧮 Email from {from_field} saved in the database.")
+        print(f"\n🧮 Email from {from_field} saved in the database.")

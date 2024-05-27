@@ -21,18 +21,10 @@ def prepareTestRawData(emailBody):
     return emailBody
 
 def predictOutput(emailBody):
-    # print(f'\nTest data: {emailBody}')
-
     new_processed_data = [prepareTestRawData(emailBody)]
-    # print(f'Processed test data: {new_processed_data[0]}\n')
 
     transformed_data = model.getConvertFeatureTransform(new_processed_data)
         
     pred = model.predict(transformed_data)
 
-    if pred[0] == -1:
-        print(f'Predicted: Phishing text')
-        return -1
-    else:
-        print(f'Predicted: Safe text')
-        return 0
+    return pred[0]
