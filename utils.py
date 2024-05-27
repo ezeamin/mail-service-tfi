@@ -15,12 +15,6 @@ def set_email_content(result):
 
     return message + '\n\n' + disclaimer_message
 
-def save_email_in_file(email_message, result):
-    result_message = 'Phishing' if result == -1 else 'Safe'
-    with open('mails.csv', 'a', encoding='utf-8') as f:
-        # From, Subject, Text, Predicted, Actual
-        f.write(f"\"{email_message['from']}\", \"{decode_mime_words(email_message['subject'])}\", \"{email_message['text']}\", {result_message}, NOT SET\n")
-
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

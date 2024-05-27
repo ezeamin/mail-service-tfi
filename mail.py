@@ -1,14 +1,17 @@
 from imapclient import IMAPClient
 import smtplib, ssl
-import config 
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Email account credentials
-IMAP_SERVER = config.IMAP_SERVER
-IMAP_USER = config.IMAP_USER
-IMAP_PASSWORD = config.IMAP_PASSWORD
-SMTP_SERVER = config.SMTP_SERVER
-SMTP_USER = config.SMTP_USER
-SMTP_PASSWORD = config.SMTP_PASSWORD
+IMAP_SERVER = getenv('IMAP_SERVER')
+IMAP_USER = getenv('IMAP_USER')
+IMAP_PASSWORD = getenv('IMAP_PASSWORD')
+SMTP_SERVER = getenv('SMTP_SERVER')
+SMTP_USER = getenv('SMTP_USER')
+SMTP_PASSWORD = getenv('SMTP_PASSWORD')
 
 # Initialize SMTP client for replies
 def getServerConnection():

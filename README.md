@@ -30,7 +30,7 @@ After that, you'll need to install the NLTK data. Follow the instructions below 
 
 This is a web service developed in Python with Flask. You can run the web service by following the instructions below.
 
-1. First, be sure to create a `config.py` file with the content of the `config.sample.py` file. This info will be used to connect to the email server. Be careful with the credentials you use.
+1. First, be sure to create a `.env` file with the content of the `.env.sample` file. This info will be used to connect to the email server. Be careful with the credentials you use.
 
 2. Then, run the web service by executing the following command:
     ```
@@ -41,7 +41,7 @@ This is a web service developed in Python with Flask. You can run the web servic
 
 Every one minute, the web service will check the inbox for new emails. If a new email is found, the service will check if the email is a phishing email using an AI Model based on Complement Naive Bayes Algorithm. If it is, the email will be marked as a phishing email and the user will be notified with a response email.
 
-New emails will also be saved in a .csv file (`mails.csv`) for further analysis.
+New emails will also be saved in SQL database for further analysis.
 
 ## License
 

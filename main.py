@@ -2,15 +2,13 @@ from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
 import email
 import datetime
-
 from email.message import EmailMessage
 
 from models.predict_output import predictOutput
 from cleanup_email import extract
 from mail import getServerConnection,getImapConnection, SMTP_USER
-from utils import set_email_content,save_email_in_file,bcolors
-import sys
-import nltk
+from utils import set_email_content,bcolors
+from db import create_email
 
 app = Flask(__name__)
 
@@ -57,7 +55,7 @@ def handle_email(email_message):
     result = predictOutput(body)
 
     # Save the email in a file
-    save_email_in_file(email_message, result)
+    create_email(email_message,body, result)
 
     # Send a reply
     send_reply(email_message, result)
@@ -69,7 +67,7 @@ def send_reply(email_message, result):
     print("\n📦 Trying to send a reply...")
     subject = email_message['subject'].replace('\n', '').replace('\r', '')
     message_id = email_message['Message-ID'].replace('\n', '').replace('\r', '')
-    from_mail = email_message['from']
+    from_mail = email_message['from'].replace('\n', '').replace('\r', '')
     thread_index = email_message['Thread-Index']
 
     reply = EmailMessage()
@@ -98,6 +96,26 @@ scheduler.start()
 
 # Check the email on startup
 check_email()
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{getenv('PGUSER')}:{getenv('PGPASSWORD')}@{getenv('PGHOST')}:{getenv('PGPORT', 5432)}/{getenv('PGDATABASE')}"
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# db = SQLAlchemy(app)
+
+# class Emails(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     from_field = db.Column(db.String(255), nullable=False)
+#     subject = db.Column(db.String(255), nullable=False)
+#     body = db.Column(db.Text, nullable=False)
+#     predicted = db.Column(db.String(255), nullable=False)
+#     actual = db.Column(db.String(255), nullable=False)
+
+# def create_email(from_field, subject, body, predicted, actual):
+#     with app.app_context():
+#         email = Emails(from_field=from_field, subject=subject, body=body, predicted=predicted, actual=actual)
+#         db.session.add(email)
+#         db.session.commit()
+#         print(f"👌🏼 Email from {from_field} saved in the database.")
 
 @app.route('/')
 def index():

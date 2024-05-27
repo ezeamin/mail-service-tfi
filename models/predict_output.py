@@ -21,10 +21,10 @@ def prepareTestRawData(emailBody):
     return emailBody
 
 def predictOutput(emailBody):
-    print(f'\nTest data: {emailBody}')
+    # print(f'\nTest data: {emailBody}')
 
     new_processed_data = [prepareTestRawData(emailBody)]
-    print(f'Processed test data: {new_processed_data[0]}\n')
+    # print(f'Processed test data: {new_processed_data[0]}\n')
 
     transformed_data = model.getConvertFeatureTransform(new_processed_data)
         
