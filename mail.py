@@ -25,7 +25,7 @@ def getServerConnection():
 
 # Initialize IMAP client
 def getImapConnection():
-    client = IMAPClient(IMAP_SERVER)
+    client = IMAPClient(IMAP_SERVER,993)
     client.login(IMAP_USER, IMAP_PASSWORD)
     print('Connected to IMAP server.')
     return client
